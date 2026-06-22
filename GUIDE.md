@@ -188,8 +188,14 @@ If "no data," re-check in this order: EC grant (2b) → Platform Integration Use
 
 ## Module 7 — Extend (with remaining time)
 
+> **The MCP personas are mock data, not org records.** The clients the agent returns over MCP
+> (David Okafor, Lakeside, AgVantage, …) live in the hosted mock server — they do **not** correspond
+> to Accounts in your org, and the agent does not need any Account to exist. The seed script below is
+> only for the on-platform *Covenant Monitor* hero record; it is **self-contained** (it creates the
+> Lakeside Account itself) so it works regardless of what's in your org.
+
 ```bash
-./scripts/05-seed-data.sh          # seed the Lakeside covenant hero record (optional)
+./scripts/05-seed-data.sh          # seed the Lakeside covenant hero record (optional; creates its own Account)
 ```
 
 - Add a second instruction to a different subagent and re-run the inner loop.
