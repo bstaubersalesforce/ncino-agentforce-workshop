@@ -1,0 +1,14 @@
+{
+  "orgName": "nCino Workshop Self-Service",
+  "edition": "Enterprise",
+  "features": ["EnableSetPasswordInApi"],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    }
+  },
+  "_note": "OPTIONAL — not the workshop path (teams get pre-configured orgs). For rebuilding in your own org later. Agentforce / Data Cloud / FSC / the nCino managed package are NOT enabled here and must be added before the MCP + agent steps work."
+}
