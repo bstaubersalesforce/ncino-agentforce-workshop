@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Page layout for Covenant_Monitor__c (workshop PoC). Deploys the field arrangement for the
-     demo. Pair with the Lightning record page (Covenant_Monitor_Record_Page) which hosts the
-     covenantBreachAlert LWC. Default layout name MUST be "<Object>-<Object Label>" to override
-     the auto-generated layout; here label = "Covenant Monitor". -->
+     demo. To surface the covenantBreachAlert LWC, add it to the Covenant Monitor record page via
+     Lightning App Builder (the record page is not packaged). Default layout name MUST be
+     "<Object>-<Object Label>" to override the auto-generated layout; here label = "Covenant Monitor". -->
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <layoutSections>
         <customLabel>true</customLabel>
