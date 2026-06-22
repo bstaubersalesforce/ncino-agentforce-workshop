@@ -59,6 +59,27 @@ config/      OPTIONAL scratch-org def (self-service rebuild only — not the wor
 GUIDE.md     the full build guide — start here
 ```
 
+## The mock MCP server
+
+The Banking Advisor data is served by a small **Cloudflare Worker** that speaks MCP. It's **shared and
+hosted** — you do not deploy or run it. Source and protocol docs:
+**[github.com/bstaubersalesforce/ncino-banking-advisor-mock](https://github.com/bstaubersalesforce/ncino-banking-advisor-mock)**
+
+The credential shells in this repo already point at it; these are the values you'll confirm/enter when
+you wire the credential in **GUIDE.md Module 2**:
+
+| What | Value |
+|---|---|
+| Named Credential URL (MCP endpoint) | `https://ncino-banking-advisor-mock.bstauber.workers.dev/banking-advisor` |
+| External Credential auth protocol | OAuth 2.0 — Client Credentials |
+| Token endpoint | `https://ncino-banking-advisor-mock.bstauber.workers.dev/oauth/token` |
+| Scope | `read` |
+| Client ID / Secret | provided by your facilitator (entered in the UI; never in this repo) |
+
+> **Facilitators / maintainers only:** the Worker is managed in Cloudflare here —
+> [dash.cloudflare.com → ncino-banking-advisor-mock (production)](https://dash.cloudflare.com/372e903ff69c005552688b578fd3768b/workers/services/view/ncino-banking-advisor-mock/production).
+> That dashboard link only works for the account owner; participants don't need it.
+
 ## Notes
 
 - **Secrets never live in this repo** — the client id/secret and any Slack webhook are entered in the
