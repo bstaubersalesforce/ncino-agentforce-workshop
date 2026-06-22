@@ -179,6 +179,11 @@ Agent Builder → **Conversation Preview** → "Give me the financial summary fo
 If "no data," re-check in this order: EC grant (2b) → Platform Integration User grant → action wiring
 (Module 5) — before suspecting the agent.
 
+> **Note on the Slack offer.** After returning a summary, the agent may offer to "send it to Slack."
+> That path calls `SlackNotifier` Apex through the `Slack_Banking_Alerts` Named Credential, which
+> deploys as an **unconfigured shell** — so the send will fail until you configure it (optional;
+> see Module 7). The MCP/advisory flow above does not depend on Slack.
+
 ---
 
 ## Module 7 — Extend (with remaining time)
@@ -190,3 +195,13 @@ If "no data," re-check in this order: EC grant (2b) → Platform Integration Use
 - Add a second instruction to a different subagent and re-run the inner loop.
 - Ask Claude Code to scan the org for other workflows that could become actions.
 - "Score this AiAuthoringBundle against the Agentforce 100-point rubric and flag safety review issues."
+
+### Optional — enable the Slack push
+
+The agent can push a summary to Slack one-way. To make it work:
+
+1. Create a Slack **Incoming Webhook** bound to your target channel.
+2. Setup → Named Credentials → edit **`Slack_Banking_Alerts`** → set the **URL** to the real webhook
+   URL (the webhook URL *is* the secret — enter it per org, never commit it). Leave it Anonymous / no
+   auth header.
+3. Re-ask the agent for a summary, then "send that to Slack" (two-step — single-shot is unreliable).

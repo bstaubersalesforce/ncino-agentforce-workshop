@@ -25,7 +25,7 @@ resolve_org() {
   local org=""
   while [ $# -gt 0 ]; do
     case "$1" in
-      --org) org="$2"; shift 2;;
+      --org) org="${2:-}"; [ -n "$org" ] || { echo "--org needs a value" >&2; exit 1; }; shift 2;;
       *) shift;;
     esac
   done
