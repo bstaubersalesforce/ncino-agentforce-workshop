@@ -76,9 +76,9 @@ you wire the credential in **GUIDE.md Module 2**:
 | Scope | `read` |
 | Client ID / Secret | provided by your facilitator (entered in the UI; never in this repo) |
 
-> **Facilitators / maintainers only:** the Worker is managed in Cloudflare here —
-> [dash.cloudflare.com → ncino-banking-advisor-mock (production)](https://dash.cloudflare.com/372e903ff69c005552688b578fd3768b/workers/services/view/ncino-banking-advisor-mock/production).
-> That dashboard link only works for the account owner; participants don't need it.
+> **Facilitators / maintainers only:** the Worker is managed in Cloudflare (service
+> `ncino-banking-advisor-mock`, production). The dashboard URL will be provided by the workshop
+> mediator; participants don't need it.
 
 ## Notes
 
