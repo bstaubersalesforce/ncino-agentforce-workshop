@@ -202,6 +202,20 @@ If "no data," re-check in this order: EC grant (2b) → Platform Integration Use
 - Ask Claude Code to scan the org for other workflows that could become actions.
 - "Score this AiAuthoringBundle against the Agentforce 100-point rubric and flag safety review issues."
 
+### Optional — show the covenant alert on the record page
+
+The repo ships a `covenantBreachAlert` Lightning Web Component (a hero-record visual for a
+`Covenant_Monitor__c` record). There is **no packaged record page** — the Lightning record page that
+hosts it can't be deployed reliably (a `flexipage:recordDetail` design-time quirk), so place the
+component yourself:
+
+1. Open a Covenant Monitor record (seed one first with `./scripts/05-seed-data.sh`).
+2. Setup gear → **Edit Page** (Lightning App Builder).
+3. Drag **`covenantBreachAlert`** from the Custom components list onto the page → **Save** → **Activate**.
+
+> The component is a stub (the Interrogate button is a placeholder) — it's here as an extension
+> starting point, not a finished feature.
+
 ### Optional — enable the Slack push
 
 The agent can push a summary to Slack one-way. To make it work:
