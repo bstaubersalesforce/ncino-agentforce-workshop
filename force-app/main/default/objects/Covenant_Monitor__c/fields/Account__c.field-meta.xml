@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Optional lookup to the Account this covenant monitor relates to. Additive — does NOT
+         modify the Account object. NOT required (so seeded/agent-created records save without an
+         account). Surfaces a "Covenant Monitors" related list on the Account page. -->
+    <fullName>Account__c</fullName>
+    <label>Account</label>
+    <type>Lookup</type>
+    <referenceTo>Account</referenceTo>
+    <relationshipLabel>Covenant Monitors</relationshipLabel>
+    <relationshipName>Covenant_Monitors</relationshipName>
+    <required>false</required>
+    <deleteConstraint>SetNull</deleteConstraint>
+</CustomField>

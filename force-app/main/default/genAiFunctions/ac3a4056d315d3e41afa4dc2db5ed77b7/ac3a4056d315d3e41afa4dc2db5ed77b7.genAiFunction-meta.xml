@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Retrieve a client&apos;s accounts, balances, net worth, and recent activity.</description>
+    <developerName>ac3a4056d315d3e41afa4dc2db5ed77b7</developerName>
+    <invocationTarget>1XOa50000002cilGAA</invocationTarget>
+    <invocationTargetType>mcpTool</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+    <localDeveloperName>ac3a4056d315d3e41afa4dc2db5ed77b7</localDeveloperName>
+    <masterLabel>get_client_financial_summary - NCinoBankingAdvisor</masterLabel>
+</GenAiFunction>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Serves: UC1. Lookup to the loan record.
+     GAP (build): the build plan ties this to the nCino managed loan object (LLC_BI__Loan__c or similar),
+     which does NOT exist in a clean demo instance. For a demo-instance target this must either
+     (a) point to a local placeholder Loan__c object, or (b) require the nCino package as a pre-install dependency.
+     Defaulting to a generic text reference is wrong; flagged for the interactive run. -->
+    <fullName>Loan__c</fullName>
+    <label>Loan</label>
+    <type>Text</type>
+    <length>120</length>
+    <required>false</required>
+    <description>TODO (build): replace Text placeholder with a Lookup to the nCino loan object or a local Loan__c, per pre-install decision.</description>
+</CustomField>

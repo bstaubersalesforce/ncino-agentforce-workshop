@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Recommend banking products (loans, credit lines, savings) tailored to a client&apos;s profile.</description>
+    <developerName>a9a80eb854afb378aa395534e91511862</developerName>
+    <invocationTarget>1XOa50000002cikGAA</invocationTarget>
+    <invocationTargetType>mcpTool</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+    <localDeveloperName>a9a80eb854afb378aa395534e91511862</localDeveloperName>
+    <masterLabel>recommend_banking_products - NCinoBankingAdvisor</masterLabel>
+</GenAiFunction>

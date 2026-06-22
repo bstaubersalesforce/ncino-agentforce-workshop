@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Serves: UC1 Proactive Covenant Breach Monitoring. Trace: build plan Custom Objects required. -->
+    <label>Covenant Monitor</label>
+    <pluralLabel>Covenant Monitors</pluralLabel>
+    <nameField>
+        <label>Covenant Monitor Name</label>
+        <type>AutoNumber</type>
+        <displayFormat>CM-{0000}</displayFormat>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>Private</sharingModel>
+    <enableActivities>true</enableActivities>
+    <enableReports>true</enableReports>
+    <description>Tracks loan covenant D/E thresholds and breach status surfaced from Banking Advisor over MCP.</description>
+</CustomObject>

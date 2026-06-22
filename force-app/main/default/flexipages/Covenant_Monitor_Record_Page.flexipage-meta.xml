@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Lightning record page for Covenant_Monitor__c. Hosts the covenantBreachAlert LWC above the
+     record detail in the main region. After deploy, ACTIVATE it as the org/app default for
+     Covenant Monitor in App Builder (activation/assignment is not captured in FlexiPage metadata). -->
+<FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <flexiPageRegions>
+        <name>main</name>
+        <type>Region</type>
+        <itemInstances>
+            <componentInstance>
+                <componentName>covenantBreachAlert</componentName>
+                <identifier>covenantBreachAlertComp</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>flexipage:recordDetail</componentName>
+                <identifier>recordDetailComp</identifier>
+                <componentInstanceProperties>
+                    <name>numVisibleActions</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+            </componentInstance>
+        </itemInstances>
+    </flexiPageRegions>
+    <masterLabel>Covenant Monitor Record Page</masterLabel>
+    <sobjectType>Covenant_Monitor__c</sobjectType>
+    <template>
+        <name>flexipage:recordHomeTemplateDesktop</name>
+    </template>
+    <type>RecordPage</type>
+</FlexiPage>

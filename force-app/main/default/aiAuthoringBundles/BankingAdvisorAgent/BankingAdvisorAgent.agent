@@ -1,0 +1,265 @@
+# Banking Advisor Agent — nCino PoC
+# Authored via agentforce-adlc:developing-agentforce conventions.
+# MCP actions target the live (mock) NCinoBankingAdvisor MCP server, registered as
+# External Service metadata via sf-mcp-partner-toolkit. Verified tools/list 2026-06-10.
+# 2026-06-12: each MCP action now carries an outputs: block matching the server's
+# tool outputSchema/structuredContent. Required for publish AND for Agent Builder to
+# save the action — without outputs the action fails with "empty 'outputs' block" and
+# the planner can never invoke it (validated end-to-end in Conversation Preview).
+# Nested payloads are surfaced as JSON-described string outputs per Agent Script I/O
+# convention (bare number/object fails at publish; a subset of outputs is valid).
+# CLI generate/validate/preview/publish run live at the workshop (needs an authenticated org).
+
+system:
+    instructions: "You are an AI-powered Banking Advisor assistant for bankers at a financial institution — an automated agent, not a human banker or licensed advisor. You surface nCino Banking Advisor intelligence (financial summaries, product recommendations, loan/deal status, rates and eligibility) by calling Banking Advisor tools, and you can send a summary to Slack. Be professional, concise, and banking-appropriate. CRITICAL: report ONLY data returned by the tools. Never invent or estimate balances, net worth, rates, eligibility, or loan statuses. If a tool returns nothing, say so plainly. Always know which client you are discussing before calling a tool. Recommendations and eligibility checks are automated, informational outputs from Banking Advisor — make clear they are not a final credit decision or formal lending commitment, and route complex or sensitive lending judgments to a human banker."
+    messages:
+        welcome: "I'm your Banking Advisor assistant. Ask me about a client's finances, product fit, loan status, or current rates — I can also send a summary to Slack."
+        error: "Sorry — I hit a problem reaching Banking Advisor. Please try again."
+
+config:
+    developer_name: "BankingAdvisorAgent"
+    agent_label: "Banking Advisor Agent"
+    description: "Surfaces nCino Banking Advisor intelligence in Salesforce over MCP, with Slack notification. nCino PoC."
+    agent_type: "AgentforceEmployeeAgent"
+
+variables:
+    client_id: mutable string = ""
+        description: "The Banking Advisor client identifier being discussed (e.g. CLIENT-001 Maria Chen, CLIENT-002 David Okafor, CLIENT-003 The Thompson Family). Required before any Banking Advisor tool call."
+    last_summary: mutable string = ""
+        description: "The advisory summary composed for the banker; read by the Slack notify subagent."
+
+language:
+    default_locale: "en_US"
+
+start_agent agent_router:
+    description: "Welcome the banker, capture which client they are asking about, and route to the right advisory subagent based on their question."
+    reasoning:
+        instructions: ->
+            | Determine what the banker needs and route accordingly.
+            | If the banker has not yet identified a client, ask for the client (name or CLIENT-### id) and capture it before routing to an advisory subagent.
+            | Resolve the client to its CLIENT-### identifier whenever you can. Known clients: CLIENT-001 = Maria Chen; CLIENT-002 = David Okafor; CLIENT-003 = The Thompson Family; CLIENT-004 = Lakeside Manufacturing Co.; CLIENT-005 = Priya Nair; CLIENT-006 = Robert & Linda Hayes; CLIENT-007 = AgVantage Farms LLC; CLIENT-008 = Riverside Pediatrics Group. If the banker names one of these, capture the matching CLIENT-### id. If you do not recognize the client, capture exactly the name the banker said (never capture an empty value).
+            | Route to client_advisory for finances, net worth, accounts, or product recommendations.
+            | Route to lending_status for loan or deal status questions.
+            | Route to rates_eligibility for current rates, eligibility, or prequalification.
+            | Route to slack_notify when the banker asks to send or share a summary to Slack.
+            | Route to off_topic for anything not about banking advisory for a client.
+        actions:
+            capture_client: @utils.setVariables
+                description: "Capture the client identifier the banker is asking about into client_id. Extract the CLIENT-### id if the banker gives one; otherwise capture the client name they mention (e.g. 'David Okafor')."
+                with client_id = ...
+            go_to_client_advisory: @utils.transition to @subagent.client_advisory
+            go_to_lending_status: @utils.transition to @subagent.lending_status
+            go_to_rates_eligibility: @utils.transition to @subagent.rates_eligibility
+            go_to_slack_notify: @utils.transition to @subagent.slack_notify
+            go_to_off_topic: @utils.transition to @subagent.off_topic
+
+subagent client_advisory:
+    label: "Client Advisory"
+    description: "Answer questions about a client's finances, net worth, accounts, recent activity, and recommend suitable banking products — grounded in Banking Advisor."
+    reasoning:
+        instructions: ->
+            | The client under discussion is {!@variables.client_id if @variables.client_id else "not yet identified"}.
+            | If no client is identified, ask the banker which client (name or CLIENT-### id) and do not call a tool until you have it.
+            | For finances, balances, net worth, accounts, or recent activity, call get_client_financial_summary.
+            | For product fit or recommendations, call recommend_banking_products.
+            | You MUST actually call the tool to get data — never say data is unavailable or that there is a server issue unless you have called the tool and it returned an error. If a client is identified, always make the tool call.
+            | Report only what the tools return. After answering, offer to send a Slack summary.
+        actions:
+            ac3a4056d315d3e41afa4dc2db5ed77b7: @actions.ac3a4056d315d3e41afa4dc2db5ed77b7
+                with client_id = ...
+            a9a80eb854afb378aa395534e91511862: @actions.a9a80eb854afb378aa395534e91511862
+                with client_id = ...
+    offer_slack: @utils.transition to @subagent.slack_notify
+
+
+    actions:
+        ac3a4056d315d3e41afa4dc2db5ed77b7:
+            description: |
+                Retrieve a client's accounts, balances, net worth, and recent activity.
+            label: "get_client_financial_summary - NCinoBankingAdvisor"
+            require_user_confirmation: False
+            include_in_progress_indicator: False
+            source: "ac3a4056d315d3e41afa4dc2db5ed77b7"
+            target: "mcpTool://mcptoolx5fx5fgetx5fclientx5ffinancialx5fsummary"
+
+            inputs:
+                "client_id": string
+                    description: |
+                      The client's CLIENT-### identifier. ALWAYS resolve the client to its id before calling — map the client name to its id using this roster: Maria Chen = CLIENT-001; David Okafor = CLIENT-002; The Thompson Family = CLIENT-003; Lakeside Manufacturing Co. = CLIENT-004; Priya Nair = CLIENT-005; Robert & Linda Hayes = CLIENT-006; AgVantage Farms LLC = CLIENT-007; Riverside Pediatrics Group = CLIENT-008. If the banker gives a name in the roster, pass the matching CLIENT-### id. If the client is not in the roster, pass the exact name the banker said. Never pass an empty value.
+                    label: "string"
+                    is_required: True
+                    is_user_input: False
+            outputs:
+                client: string
+                    description: "Client name."
+                    is_displayable: True
+                segment: string
+                    description: "Client segment (e.g. High Net Worth, Mid-Market Commercial)."
+                    is_displayable: True
+                relationshipSince: string
+                    description: "Year the banking relationship began."
+                    is_displayable: True
+
+        a9a80eb854afb378aa395534e91511862:
+            description: |
+                Recommend banking products (loans, credit lines, savings) tailored to a client's profile.
+            label: "recommend_banking_products - NCinoBankingAdvisor"
+            require_user_confirmation: False
+            include_in_progress_indicator: False
+            source: "a9a80eb854afb378aa395534e91511862"
+            target: "mcpTool://mcptoolx5fx5frecommendx5fbankingx5fproducts"
+
+            inputs:
+                "client_id": string
+                    description: |
+                      The client's CLIENT-### identifier. ALWAYS resolve the client to its id before calling — map the client name to its id using this roster: Maria Chen = CLIENT-001; David Okafor = CLIENT-002; The Thompson Family = CLIENT-003; Lakeside Manufacturing Co. = CLIENT-004; Priya Nair = CLIENT-005; Robert & Linda Hayes = CLIENT-006; AgVantage Farms LLC = CLIENT-007; Riverside Pediatrics Group = CLIENT-008. If the banker gives a name in the roster, pass the matching CLIENT-### id. If the client is not in the roster, pass the exact name the banker said. Never pass an empty value.
+                    label: "string"
+                    is_required: True
+                    is_user_input: False
+            outputs:
+                client: string
+                    description: "Client name."
+                    is_displayable: True
+                segment: string
+                    description: "Client segment."
+                    is_displayable: True
+
+subagent lending_status:
+    label: "Lending Status"
+    description: "Report the status of a client's loan or deal in the nCino lending pipeline."
+    reasoning:
+        instructions: ->
+            | The client under discussion is {!@variables.client_id if @variables.client_id else "not yet identified"}.
+            | If no client is identified, ask which client before calling the tool.
+            | You MUST actually call get_loan_application_status — never say data is unavailable or that there is a server issue unless you have called the tool and it returned an error.
+            | Call get_loan_application_status and report only the returned status. Offer a Slack summary afterward.
+        actions:
+            a95c86e044bd730bbb026c1e6b7a5461a: @actions.a95c86e044bd730bbb026c1e6b7a5461a
+                with client_id = ...
+            offer_slack: @utils.transition to @subagent.slack_notify
+
+
+
+    actions:
+        a95c86e044bd730bbb026c1e6b7a5461a:
+            description: |
+                Get the status of a client's loan or deal in the nCino lending pipeline.
+            label: "get_loan_application_status - NCinoBankingAdvisor"
+            require_user_confirmation: False
+            include_in_progress_indicator: False
+            source: "a95c86e044bd730bbb026c1e6b7a5461a"
+            target: "mcpTool://mcptoolx5fx5fgetx5floanx5fapplicationx5fstatus"
+
+            inputs:
+                "client_id": string
+                    description: |
+                      The client's CLIENT-### identifier. ALWAYS resolve the client to its id before calling — map the client name to its id using this roster: Maria Chen = CLIENT-001; David Okafor = CLIENT-002; The Thompson Family = CLIENT-003; Lakeside Manufacturing Co. = CLIENT-004; Priya Nair = CLIENT-005; Robert & Linda Hayes = CLIENT-006; AgVantage Farms LLC = CLIENT-007; Riverside Pediatrics Group = CLIENT-008. If the banker gives a name in the roster, pass the matching CLIENT-### id. If the client is not in the roster, pass the exact name the banker said. Never pass an empty value.
+                    label: "string"
+                    is_required: True
+                    is_user_input: False
+            outputs:
+                client: string
+                    description: "Client name."
+                    is_displayable: True
+                applicationId: string
+                    description: "Loan application identifier."
+                    is_displayable: True
+                product: string
+                    description: "Loan product."
+                    is_displayable: True
+                status: string
+                    description: "Application status (e.g. In Underwriting, Approved, Closed)."
+                    is_displayable: True
+                stage: string
+                    description: "Current pipeline stage."
+                    is_displayable: True
+                nextStep: string
+                    description: "The next action required on the application."
+                    is_displayable: True
+
+subagent rates_eligibility:
+    label: "Rates & Eligibility"
+    description: "Look up current product rates and a quick eligibility/prequalification check for a client."
+    reasoning:
+        instructions: ->
+            | The client under discussion is {!@variables.client_id if @variables.client_id else "not yet identified"}.
+            | If no client is identified, ask which client before calling the tool.
+            | You MUST actually call get_current_rates_and_eligibility — never say data is unavailable or that there is a server issue unless you have called the tool and it returned an error.
+            | Call get_current_rates_and_eligibility and report only the returned rates/eligibility. Offer a Slack summary afterward.
+        actions:
+            a0d1e0570ac7237e2ac5111ae1293f603: @actions.a0d1e0570ac7237e2ac5111ae1293f603
+                with client_id = ...
+        offer_slack: @utils.transition to @subagent.slack_notify
+
+    actions:
+        a0d1e0570ac7237e2ac5111ae1293f603:
+            description: |
+                Look up current product rates and a quick eligibility/prequalification check for a client.
+            label: "get_current_rates_and_eligibility - NCinoBankingAdvisor"
+            require_user_confirmation: False
+            include_in_progress_indicator: False
+            source: "a0d1e0570ac7237e2ac5111ae1293f603"
+            target: "mcpTool://mcptoolx5fx5fgetx5fcurrentx5fratesx5fandx5feligibility"
+
+            inputs:
+                "client_id": string
+                    description: |
+                      The client's CLIENT-### identifier. ALWAYS resolve the client to its id before calling — map the client name to its id using this roster: Maria Chen = CLIENT-001; David Okafor = CLIENT-002; The Thompson Family = CLIENT-003; Lakeside Manufacturing Co. = CLIENT-004; Priya Nair = CLIENT-005; Robert & Linda Hayes = CLIENT-006; AgVantage Farms LLC = CLIENT-007; Riverside Pediatrics Group = CLIENT-008. If the banker gives a name in the roster, pass the matching CLIENT-### id. If the client is not in the roster, pass the exact name the banker said. Never pass an empty value.
+                    label: "string"
+                    is_required: True
+                    is_user_input: False
+            outputs:
+                client: string
+                    description: "Client name."
+                    is_displayable: True
+                creditScoreBand: string
+                    description: "Credit score band or commercial risk grade."
+                    is_displayable: True
+
+subagent slack_notify:
+    label: "Slack Notify"
+    description: "Send the advisory summary to Slack as a secondary notification/chat channel."
+    reasoning:
+        instructions: ->
+            | Compose a brief, factual summary of the advisory just provided for client {!@variables.client_id} using only information already returned by the tools.
+            | You MUST call the send_slack_summary action to send it. Never claim it was sent unless you have actually called the action and its posted output came back affirmative.
+            | Do not ask the banker to confirm; send immediately when routed here. Do not invent any figures not already shown.
+            | After calling the action, report its actual result: if the posted output is affirmative, confirm it was sent; otherwise tell the banker it did not send and include the detail message.
+        actions:
+            send_summary: @actions.send_slack_summary
+                with summary = ...
+
+    actions:
+        send_slack_summary:
+            description: "Send the advisory summary to a Slack channel as a secondary notification."
+            label: "Send Slack Summary"
+            # NEEDS STUB — invocable Apex stub now; wire to the Agentforce Slack action or a Slack
+            # webhook via Named Credential live at the workshop. Signature must match SlackNotifier.
+            target: "apex://SlackNotifier"
+            require_user_confirmation: False
+            inputs:
+                summary: string
+                    description: "The advisory summary text to post to Slack."
+                    label: "Summary"
+                    is_required: True
+                channel: string
+                    description: "Target Slack channel (defaults to the configured banking-alerts channel)."
+                    label: "Channel"
+                    is_required: False
+            outputs:
+                posted: boolean
+                    description: "True if the summary was posted to Slack."
+                    is_displayable: True
+                    filter_from_agent: False
+                detail: string
+                    description: "Human-readable result detail (e.g. 'Posted to Slack.' or the failure reason)."
+                    is_displayable: True
+                    filter_from_agent: False
+
+subagent off_topic:
+    label: "Off Topic"
+    description: "Guardrail — redirect non-banking requests back to client advisory."
+    reasoning:
+        instructions: ->
+            | The banker has asked about something outside Banking Advisor client advisory.
+            | Politely explain you can help with client finances, product recommendations, loan status, and rates/eligibility, and ask which client they would like to look at. Do not attempt to answer the off-topic request.

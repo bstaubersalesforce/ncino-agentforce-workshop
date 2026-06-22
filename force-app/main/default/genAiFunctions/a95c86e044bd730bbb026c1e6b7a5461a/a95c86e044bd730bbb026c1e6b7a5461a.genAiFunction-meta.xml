@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Get the status of a client&apos;s loan or deal in the nCino lending pipeline.</description>
+    <developerName>a95c86e044bd730bbb026c1e6b7a5461a</developerName>
+    <invocationTarget>1XOa50000002cijGAA</invocationTarget>
+    <invocationTargetType>mcpTool</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+    <localDeveloperName>a95c86e044bd730bbb026c1e6b7a5461a</localDeveloperName>
+    <masterLabel>get_loan_application_status - NCinoBankingAdvisor</masterLabel>
+</GenAiFunction>

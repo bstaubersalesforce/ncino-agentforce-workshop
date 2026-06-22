@@ -1,0 +1,21 @@
+{
+  "required" : [ "summary" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "channel" : {
+      "title" : "Channel",
+      "description" : "Target Slack channel (defaults to the configured banking-alerts channel).",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "summary" : {
+      "title" : "Summary",
+      "description" : "The advisory summary text to post to Slack.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

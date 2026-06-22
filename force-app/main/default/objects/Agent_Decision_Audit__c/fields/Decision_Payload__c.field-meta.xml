@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Serves: UC1/UC2 auditability. PII-minimized snapshot of the agent decision. -->
+    <fullName>Decision_Payload__c</fullName>
+    <label>Decision Payload</label>
+    <type>LongTextArea</type>
+    <length>32768</length>
+    <visibleLines>5</visibleLines>
+    <required>false</required>
+    <description>PII-minimized. SECURITY: candidate for Shield Platform Encryption (regulated lending data).</description>
+</CustomField>

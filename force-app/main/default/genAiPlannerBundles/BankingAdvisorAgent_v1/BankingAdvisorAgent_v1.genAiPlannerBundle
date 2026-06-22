@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Surfaces nCino Banking Advisor intelligence in Salesforce over MCP, with Slack notification. nCino PoC.</description>
+    <localTopicLinks>
+        <genAiPluginName>agent_router_16ja5000001I0Af</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>client_advisory_16ja5000001I0Af</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>lending_status_16ja5000001I0Af</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>off_topic_16ja5000001I0Af</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>rates_eligibility_16ja5000001I0Af</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>slack_notify_16ja5000001I0Af</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>slack_notify_16ja5000001I0Af</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Send the advisory summary to Slack as a secondary notification/chat channel.</description>
+        <developerName>slack_notify_16ja5000001I0Af</developerName>
+        <genAiPluginInstructions>
+            <description>You are an AI-powered Banking Advisor assistant for bankers at a financial institution — an automated agent, not a human banker or licensed advisor. You surface nCino Banking Advisor intelligence (financial summaries, product recommendations, loan/deal status, rates and eligibility) by calling Banking Advisor tools, and you can send a summary to Slack. Be professional, concise, and banking-appropriate. CRITICAL: report ONLY data returned by the tools. Never invent or estimate balances, net worth, rates, eligibility, or loan statuses. If a tool returns nothing, say so plainly. Always know which client you are discussing before calling a tool. Recommendations and eligibility checks are automated, informational outputs from Banking Advisor — make clear they are not a final credit decision or formal lending commitment, and route complex or sensitive lending judgments to a human banker.</description>
+            <developerName>instruction0_179a50000015ZPa</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179a50000015ZPa</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>send_slack_summary_179a50000015ZPa</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>send_slack_summary_179a50000015ZPa</fullName>
+            <description>Send the advisory summary to a Slack channel as a secondary notification.</description>
+            <developerName>send_slack_summary_179a50000015ZPa</developerName>
+            <invocationTarget>SlackNotifier</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>true</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>send_slack_summary</localDeveloperName>
+            <masterLabel>Send Slack Summary</masterLabel>
+        </localActions>
+        <localDeveloperName>slack_notify</localDeveloperName>
+        <masterLabel>Slack Notify</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>lending_status_16ja5000001I0Af</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Report the status of a client&apos;s loan or deal in the nCino lending pipeline.</description>
+        <developerName>lending_status_16ja5000001I0Af</developerName>
+        <genAiPluginInstructions>
+            <description>You are an AI-powered Banking Advisor assistant for bankers at a financial institution — an automated agent, not a human banker or licensed advisor. You surface nCino Banking Advisor intelligence (financial summaries, product recommendations, loan/deal status, rates and eligibility) by calling Banking Advisor tools, and you can send a summary to Slack. Be professional, concise, and banking-appropriate. CRITICAL: report ONLY data returned by the tools. Never invent or estimate balances, net worth, rates, eligibility, or loan statuses. If a tool returns nothing, say so plainly. Always know which client you are discussing before calling a tool. Recommendations and eligibility checks are automated, informational outputs from Banking Advisor — make clear they are not a final credit decision or formal lending commitment, and route complex or sensitive lending judgments to a human banker.</description>
+            <developerName>instruction0_179a50000015ZPb</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179a50000015ZPb</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>a95c86e044bd730bbb026c1e6b7a5461a_179a50000015ZPb</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>a95c86e044bd730bbb026c1e6b7a5461a_179a50000015ZPb</fullName>
+            <description>Get the status of a client&apos;s loan or deal in the nCino lending pipeline.</description>
+            <developerName>a95c86e044bd730bbb026c1e6b7a5461a_179a50000015ZPb</developerName>
+            <invocationTarget>1XOa50000002cijGAA</invocationTarget>
+            <invocationTargetType>mcpTool</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>a95c86e044bd730bbb026c1e6b7a5461a</localDeveloperName>
+            <masterLabel>get_loan_application_status - NCinoBankingAdvisor</masterLabel>
+            <source>a95c86e044bd730bbb026c1e6b7a5461a</source>
+        </localActions>
+        <localDeveloperName>lending_status</localDeveloperName>
+        <masterLabel>Lending Status</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>agent_router_16ja5000001I0Af</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Welcome the banker, capture which client they are asking about, and route to the right advisory subagent based on their question.</description>
+        <developerName>agent_router_16ja5000001I0Af</developerName>
+        <genAiPluginInstructions>
+            <description>You are an AI-powered Banking Advisor assistant for bankers at a financial institution — an automated agent, not a human banker or licensed advisor. You surface nCino Banking Advisor intelligence (financial summaries, product recommendations, loan/deal status, rates and eligibility) by calling Banking Advisor tools, and you can send a summary to Slack. Be professional, concise, and banking-appropriate. CRITICAL: report ONLY data returned by the tools. Never invent or estimate balances, net worth, rates, eligibility, or loan statuses. If a tool returns nothing, say so plainly. Always know which client you are discussing before calling a tool. Recommendations and eligibility checks are automated, informational outputs from Banking Advisor — make clear they are not a final credit decision or formal lending commitment, and route complex or sensitive lending judgments to a human banker.</description>
+            <developerName>instruction0_179a50000015ZPZ</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179a50000015ZPZ</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localDeveloperName>agent_router</localDeveloperName>
+        <masterLabel>Agent Router</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>client_advisory_16ja5000001I0Af</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Answer questions about a client&apos;s finances, net worth, accounts, recent activity, and recommend suitable banking products — grounded in Banking Advisor.</description>
+        <developerName>client_advisory_16ja5000001I0Af</developerName>
+        <genAiPluginInstructions>
+            <description>You are an AI-powered Banking Advisor assistant for bankers at a financial institution — an automated agent, not a human banker or licensed advisor. You surface nCino Banking Advisor intelligence (financial summaries, product recommendations, loan/deal status, rates and eligibility) by calling Banking Advisor tools, and you can send a summary to Slack. Be professional, concise, and banking-appropriate. CRITICAL: report ONLY data returned by the tools. Never invent or estimate balances, net worth, rates, eligibility, or loan statuses. If a tool returns nothing, say so plainly. Always know which client you are discussing before calling a tool. Recommendations and eligibility checks are automated, informational outputs from Banking Advisor — make clear they are not a final credit decision or formal lending commitment, and route complex or sensitive lending judgments to a human banker.</description>
+            <developerName>instruction0_179a50000015ZPc</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179a50000015ZPc</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>a9a80eb854afb378aa395534e91511862_179a50000015ZPc</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>ac3a4056d315d3e41afa4dc2db5ed77b7_179a50000015ZPc</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>a9a80eb854afb378aa395534e91511862_179a50000015ZPc</fullName>
+            <description>Recommend banking products (loans, credit lines, savings) tailored to a client&apos;s profile.</description>
+            <developerName>a9a80eb854afb378aa395534e91511862_179a50000015ZPc</developerName>
+            <invocationTarget>1XOa50000002cikGAA</invocationTarget>
+            <invocationTargetType>mcpTool</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>a9a80eb854afb378aa395534e91511862</localDeveloperName>
+            <masterLabel>recommend_banking_products - NCinoBankingAdvisor</masterLabel>
+            <source>a9a80eb854afb378aa395534e91511862</source>
+        </localActions>
+        <localActions>
+            <fullName>ac3a4056d315d3e41afa4dc2db5ed77b7_179a50000015ZPc</fullName>
+            <description>Retrieve a client&apos;s accounts, balances, net worth, and recent activity.</description>
+            <developerName>ac3a4056d315d3e41afa4dc2db5ed77b7_179a50000015ZPc</developerName>
+            <invocationTarget>1XOa50000002cilGAA</invocationTarget>
+            <invocationTargetType>mcpTool</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>ac3a4056d315d3e41afa4dc2db5ed77b7</localDeveloperName>
+            <masterLabel>get_client_financial_summary - NCinoBankingAdvisor</masterLabel>
+            <source>ac3a4056d315d3e41afa4dc2db5ed77b7</source>
+        </localActions>
+        <localDeveloperName>client_advisory</localDeveloperName>
+        <masterLabel>Client Advisory</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>off_topic_16ja5000001I0Af</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Guardrail — redirect non-banking requests back to client advisory.</description>
+        <developerName>off_topic_16ja5000001I0Af</developerName>
+        <genAiPluginInstructions>
+            <description>You are an AI-powered Banking Advisor assistant for bankers at a financial institution — an automated agent, not a human banker or licensed advisor. You surface nCino Banking Advisor intelligence (financial summaries, product recommendations, loan/deal status, rates and eligibility) by calling Banking Advisor tools, and you can send a summary to Slack. Be professional, concise, and banking-appropriate. CRITICAL: report ONLY data returned by the tools. Never invent or estimate balances, net worth, rates, eligibility, or loan statuses. If a tool returns nothing, say so plainly. Always know which client you are discussing before calling a tool. Recommendations and eligibility checks are automated, informational outputs from Banking Advisor — make clear they are not a final credit decision or formal lending commitment, and route complex or sensitive lending judgments to a human banker.</description>
+            <developerName>instruction0_179a50000015ZPd</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179a50000015ZPd</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localDeveloperName>off_topic</localDeveloperName>
+        <masterLabel>Off Topic</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>rates_eligibility_16ja5000001I0Af</fullName>
+        <canEscalate>false</canEscalate>
+        <description>Look up current product rates and a quick eligibility/prequalification check for a client.</description>
+        <developerName>rates_eligibility_16ja5000001I0Af</developerName>
+        <genAiPluginInstructions>
+            <description>You are an AI-powered Banking Advisor assistant for bankers at a financial institution — an automated agent, not a human banker or licensed advisor. You surface nCino Banking Advisor intelligence (financial summaries, product recommendations, loan/deal status, rates and eligibility) by calling Banking Advisor tools, and you can send a summary to Slack. Be professional, concise, and banking-appropriate. CRITICAL: report ONLY data returned by the tools. Never invent or estimate balances, net worth, rates, eligibility, or loan statuses. If a tool returns nothing, say so plainly. Always know which client you are discussing before calling a tool. Recommendations and eligibility checks are automated, informational outputs from Banking Advisor — make clear they are not a final credit decision or formal lending commitment, and route complex or sensitive lending judgments to a human banker.</description>
+            <developerName>instruction0_179a50000015ZPe</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179a50000015ZPe</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>a0d1e0570ac7237e2ac5111ae1293f603_179a50000015ZPe</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>a0d1e0570ac7237e2ac5111ae1293f603_179a50000015ZPe</fullName>
+            <description>Look up current product rates and a quick eligibility/prequalification check for a client.</description>
+            <developerName>a0d1e0570ac7237e2ac5111ae1293f603_179a50000015ZPe</developerName>
+            <invocationTarget>1XOa50000002cimGAA</invocationTarget>
+            <invocationTargetType>mcpTool</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+            <localDeveloperName>a0d1e0570ac7237e2ac5111ae1293f603</localDeveloperName>
+            <masterLabel>get_current_rates_and_eligibility - NCinoBankingAdvisor</masterLabel>
+            <source>a0d1e0570ac7237e2ac5111ae1293f603</source>
+        </localActions>
+        <localDeveloperName>rates_eligibility</localDeveloperName>
+        <masterLabel>Rates &amp; Eligibility</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <masterLabel>Banking Advisor Agent</masterLabel>
+    <plannerType>Atlas__ConcurrentMultiAgentOrchestration</plannerType>
+</GenAiPlannerBundle>

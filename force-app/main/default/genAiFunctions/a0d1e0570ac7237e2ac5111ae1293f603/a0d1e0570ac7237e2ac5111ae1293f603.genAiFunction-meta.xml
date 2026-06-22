@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiFunction xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Look up current product rates and a quick eligibility/prequalification check for a client.</description>
+    <developerName>a0d1e0570ac7237e2ac5111ae1293f603</developerName>
+    <invocationTarget>1XOa50000002cimGAA</invocationTarget>
+    <invocationTargetType>mcpTool</invocationTargetType>
+    <isConfirmationRequired>false</isConfirmationRequired>
+    <isIncludeInProgressIndicator>false</isIncludeInProgressIndicator>
+    <localDeveloperName>a0d1e0570ac7237e2ac5111ae1293f603</localDeveloperName>
+    <masterLabel>get_current_rates_and_eligibility - NCinoBankingAdvisor</masterLabel>
+</GenAiFunction>

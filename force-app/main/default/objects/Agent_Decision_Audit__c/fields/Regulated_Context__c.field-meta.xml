@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <!-- Serves: UC2 edge case. Classifies the regulated context of the audited decision. -->
+    <fullName>Regulated_Context__c</fullName>
+    <label>Regulated Context</label>
+    <type>Picklist</type>
+    <required>false</required>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Lending</fullName><default>true</default><label>Lending</label></value>
+            <value><fullName>KYC_AML</fullName><default>false</default><label>KYC/AML</label></value>
+            <value><fullName>Other</fullName><default>false</default><label>Other</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
