@@ -1,0 +1,12 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true
+    }
+  ],
+  "name": "ncino-workshop",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "66.0",
+  "_note": "No namespace: the workshop deploys source into pre-configured orgs. A namespace would require ncinoabp registered in every org. The optional scratch-org def (config/) is for participants who later rebuild in their own org."
+}
