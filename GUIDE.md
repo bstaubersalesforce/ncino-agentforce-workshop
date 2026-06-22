@@ -13,13 +13,40 @@ hands out. Copy `.env.example` to `.env` and set `ORG_ALIAS` to your org alias. 
 
 ## Module 0 — Comprehend (Claude Code)
 
-In Claude Code, inside this repo:
+Open Claude Code inside this repo. First, install the two workshop plugins, then use them to
+reverse-engineer the agent.
 
-1. Confirm the skill is available: `/developing-agentforce`
-2. Run these prompts:
-   - "Locate the AiAuthoringBundle directory. Read the .agent file and produce an Agent Spec in plain English."
-   - "Generate a Mermaid Subagent Map diagram for this agent."
-   - "What does the client_advisory subagent protect, and what gating conditions guard it?"
+### 0a — Install the plugins
+
+In Claude Code, run `/plugin` and install both (or use your facilitator's marketplace link):
+
+- **`agentforce-adlc`** — the Agent Development Life Cycle toolkit. Provides the skills you'll use to
+  build, iterate on, and test the agent.
+- **`sf-mcp-partner-toolkit`** — the Salesforce MCP integration toolkit. Provides the skills you'll use
+  to wire and troubleshoot the connection to the mock MCP server.
+
+After install, confirm a skill is available: `/developing-agentforce`.
+
+### The skills, and when to use each
+
+| Skill | Plugin | What it does | Use it in |
+|---|---|---|---|
+| **`developing-agentforce`** | agentforce-adlc | Build, edit, debug, preview, and publish `.agent` bundles; the core authoring loop. | Modules 0, 4, 5 |
+| **`testing-agentforce`** | agentforce-adlc | Write and run structured agent test specs (AiEvaluationDefinition); interpret results. | Module 7 (optional) |
+| **`diagnose-connection`** | sf-mcp-partner-toolkit | Troubleshoot MCP connectivity — installs MCP Workbench and walks an error taxonomy. | Module 2, if the smoke test fails |
+| **`validate-end-to-end`** | sf-mcp-partner-toolkit | Confirm the MCP integration works from Agentforce: discovery → schema → agent invocation. | Module 6 |
+
+> The other skills in these plugins (`scaffold-mcp-integration`, `deploy-and-configure`,
+> `observing-agentforce`, etc.) generate or deploy MCP metadata that this repo **already ships** — you
+> don't need them for the workshop build. Stick to the four above.
+
+### 0b — Reverse-engineer the agent
+
+With `developing-agentforce` available, run these prompts:
+
+- "Locate the AiAuthoringBundle directory. Read the .agent file and produce an Agent Spec in plain English."
+- "Generate a Mermaid Subagent Map diagram for this agent."
+- "What does the client_advisory subagent protect, and what gating conditions guard it?"
 
 ---
 
@@ -105,6 +132,9 @@ Expected: `200` + a body listing **4 tools**. Troubleshooting:
 | "Unauthorized endpoint" | Re-save the Named Credential to refresh the Remote Site Setting |
 | empty body / INVALID_AUTH_HEADER | "Generate Authorization Header" is off on the NC |
 
+> **Stuck?** Run the **`diagnose-connection`** skill (sf-mcp-partner-toolkit) in Claude Code — it walks
+> the MCP error taxonomy and confirms MCP Workbench is set up to pinpoint the failure.
+
 ---
 
 ## Module 3 — Register the MCP tools (🔴)
@@ -145,6 +175,8 @@ Now the **inner loop** — edit behavior with NO publish:
 4. `sf agent preview start --use-live-actions ...` and re-send the prompt to see the change.
 
 > **This is the inner loop: edit `.agent` → validate → preview `--use-live-actions`. No publish needed.**
+> Lean on the **`developing-agentforce`** skill here — it understands the `.agent` syntax and the
+> validate/preview commands, and can diagnose validation errors.
 
 ---
 
@@ -179,6 +211,9 @@ Agent Builder → **Conversation Preview** → "Give me the financial summary fo
 If "no data," re-check in this order: EC grant (2b) → Platform Integration User grant → action wiring
 (Module 5) — before suspecting the agent.
 
+> **Confirm the full chain** with the **`validate-end-to-end`** skill (sf-mcp-partner-toolkit) — it
+> checks tool discovery, schema correctness, and live agent invocation in one pass.
+
 > **Note on the Slack offer.** After returning a summary, the agent may offer to "send it to Slack."
 > That path calls `SlackNotifier` Apex through the `Slack_Banking_Alerts` Named Credential, which
 > deploys as an **unconfigured shell** — so the send will fail until you configure it (optional;
@@ -201,6 +236,8 @@ If "no data," re-check in this order: EC grant (2b) → Platform Integration Use
 - Add a second instruction to a different subagent and re-run the inner loop.
 - Ask Claude Code to scan the org for other workflows that could become actions.
 - "Score this AiAuthoringBundle against the Agentforce 100-point rubric and flag safety review issues."
+- Use the **`testing-agentforce`** skill (agentforce-adlc) to write a structured test spec for the
+  agent and run it — a glimpse of the regression-testing side of the ADLC.
 
 ### Optional — show the covenant alert on the record page
 

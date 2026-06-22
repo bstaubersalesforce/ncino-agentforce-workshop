@@ -20,6 +20,8 @@ optional one-way Slack push. The MCP server is **shared and hosted** — you do 
 - An **assigned, pre-configured org** (Agentforce, Data Cloud, FSC, and the nCino package are already
   enabled). Log in: `sf org login web --alias <your-alias>`
 - **Client ID / Client Secret** for the MCP credential — provided by your facilitator.
+- **Claude Code**, with the **`agentforce-adlc`** and **`sf-mcp-partner-toolkit`** plugins — you install
+  these in GUIDE.md Module 0 (the guide describes each skill and when to use it).
 - (Optional) Node.js, only if you explore the worker source separately.
 
 ## Quick start
