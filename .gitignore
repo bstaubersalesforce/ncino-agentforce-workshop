@@ -1,0 +1,14 @@
+# Salesforce DX local state
+.sf/
+.sfdx/
+.localdevserver/
+
+# Logs, OS, editor
+*.log
+.DS_Store
+node_modules/
+
+# Local env + anything that could carry secrets
+.env
+*.bak
+**/*.regen
