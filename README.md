@@ -1,7 +1,12 @@
 # nCino Banking Advisor Workshop
 
 Clone this repo to build the **Banking Advisor** Agentforce agent in your assigned org and connect it
-to a shared mock **MCP server**. The full step-by-step is in **[GUIDE.md](./GUIDE.md)** — start there.
+to a shared mock **MCP server**.
+
+## 👉 Start here: [**GUIDE.md** — the full step-by-step build guide](./GUIDE.md)
+
+Everything below is orientation. The detailed, module-by-module instructions live in
+**[GUIDE.md](./GUIDE.md)** — open it and follow it top to bottom.
 
 ## What you're building
 
