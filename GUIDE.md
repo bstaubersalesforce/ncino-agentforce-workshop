@@ -18,12 +18,22 @@ reverse-engineer the agent.
 
 ### 0a — Install the plugins
 
-In Claude Code, run `/plugin` and install both (or use your facilitator's marketplace link):
+In Claude Code, install both plugins. The exact marketplace commands:
 
 - **`agentforce-adlc`** — the Agent Development Life Cycle toolkit. Provides the skills you'll use to
   build, iterate on, and test the agent.
+  ```
+  /plugin marketplace add SalesforceAIResearch/agentforce-adlc
+  /plugin install agentforce-adlc@agentforce-adlc
+  ```
 - **`sf-mcp-partner-toolkit`** — the Salesforce MCP integration toolkit. Provides the skills you'll use
   to wire and troubleshoot the connection to the mock MCP server.
+  ```
+  /plugin marketplace add mvogelgesang/sf-mcp-partner-toolkit
+  /plugin install sf-mcp-partner-toolkit@mvogelgesang-plugins
+  ```
+  > Provenance note: `sf-mcp-partner-toolkit` is a public community repo
+  > (`github.com/mvogelgesang/sf-mcp-partner-toolkit`), not an official Salesforce marketplace.
 
 After install, confirm a skill is available: `/developing-agentforce`.
 
@@ -59,6 +69,18 @@ With `developing-agentforce` available, run these prompts:
 ```
 
 Then: `sf org open` → Setup → Object Manager → confirm **Covenant_Monitor__c** appears.
+
+> **Troubleshooting — deploy fails on retry with "DeveloperName 'BankingAdvisorAgent' is already in use by a
+> Bot Definition."** A previous partial deploy left an orphaned authoring bundle that reserved the agent's
+> name, even though no agent shows up in the org. It is invisible to a normal Bot query — find it with
+> `sf org list metadata -m AiAuthoringBundle -o <org> --json` (look for `BankingAdvisorAgent_1` or similar).
+> Confirm no real agent exists (`SELECT DeveloperName FROM BotDefinition` and `… FROM GenAiPlannerDefinition`
+> both return 0 rows), then remove the orphan and redeploy:
+> ```bash
+> sf project delete source --metadata "AiAuthoringBundle:BankingAdvisorAgent_1" -o <org> --no-prompt
+> ./scripts/02-deploy.sh
+> ```
+> See `LESSONS-LEARNED.md` for the full diagnosis.
 
 ---
 
